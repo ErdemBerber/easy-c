@@ -1,0 +1,21 @@
+"sl/control" useFile
+"../util" useFile
+"support/listEqual" useFile
+
+[
+  "Test 1" LF & print
+  ( 10 () unwrap 20 )
+  [ ( 10 20 ) = ] assert "passed" LF & print
+] call
+
+[
+  "Test 1" LF & print
+  ( 10 ( 20 ) unwrap 30 )
+  [ ( 10 20 30 ) = ] assert "passed" LF & print
+] call
+
+[
+  "Test 1" LF & print
+  ( 10 ( 20 30 ) unwrap 40 )
+  [ ( 10 20 30 40 ) = ] assert "passed" LF & print
+] call

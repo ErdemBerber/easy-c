@@ -1,0 +1,33 @@
+# Traverse AST tree and inline all label nodes.
+# The original tree is not preserved.
+# input:
+#   nodes - array of AST tree root nodes
+# output:
+#   array of transformed AST nodes
+#   TRUE
+#   -- or --
+#   text containing error message
+#   FALSE
+passInlineLabels: [ nodes:;
+  nodes passInlineLabels' TRUE
+] func;
+
+passInlineLabels': [
+  nodes:;
+  newNodes: ();
+  i: 0; [ i nodes fieldCount < ] [
+    node: i nodes @;
+    node "children" has [
+      node.children passInlineLabels' node.!children
+    ] when
+
+    node "LABEL_NODE" has [
+      newNodes node.children [ , ] each drop
+      ( ) node.!children
+    ] when
+
+    newNodes node , drop
+    i 1 + !i
+  ] while
+  newNodes
+] func;

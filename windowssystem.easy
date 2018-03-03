@@ -1,0 +1,168 @@
+"sl/control" useFile
+()       () "EasyDll" "clearArgs"            importDynamic
+{value: 0i8;}    () "EasyDll" "pushArgI8"            importDynamic
+{value: 0i16;}   () "EasyDll" "pushArgI16"           importDynamic
+{value: 0i32;}   () "EasyDll" "pushArgI32"           importDynamic
+{value: 0i64;}   () "EasyDll" "pushArgI64"           importDynamic
+{value: 0n8 ;}   () "EasyDll" "pushArgN8"            importDynamic
+{value: 0n16;}   () "EasyDll" "pushArgN16"           importDynamic
+{value: 0n32;}   () "EasyDll" "pushArgN32"           importDynamic
+{value: 0n64;}   () "EasyDll" "pushArgN64"           importDynamic
+{value: 0nx;}    () "EasyDll" "pushArgNX"            importDynamic
+{value: 0.0r32;} () "EasyDll" "pushArgR32"           importDynamic
+{value: 0.0r64;} () "EasyDll" "pushArgR64"           importDynamic
+{value: "";}     () "EasyDll" "pushArgSTR"           importDynamic
+
+() {type:0i8 ;}    "EasyDll" "getResultI8"          importDynamic
+() {type:0i16;}    "EasyDll" "getResultI16"         importDynamic
+() {type:0i32;}    "EasyDll" "getResultI32"         importDynamic
+() {type:0i64;}    "EasyDll" "getResultI64"         importDynamic
+() {type:0n8 ;}    "EasyDll" "getResultN8"          importDynamic
+() {type:0n16;}    "EasyDll" "getResultN16"         importDynamic
+() {type:0n32;}    "EasyDll" "getResultN32"         importDynamic
+() {type:0n64;}    "EasyDll" "getResultN64"         importDynamic
+() {type:0nx;}     "EasyDll" "getResultNX"          importDynamic
+() {type:0.0r32;}  "EasyDll" "getResultR32"         importDynamic
+() {type:0.0r64;}  "EasyDll" "getResultR64"         importDynamic
+() {type:"";}      "EasyDll" "getResultSTR"         importDynamic
+
+{svalue: FALSE;} ()   "EasyDll" "setHasResult"         importDynamic
+() ()        "EasyDll" "setResultTypeI8"      importDynamic
+() ()        "EasyDll" "setResultTypeI16"     importDynamic
+() ()        "EasyDll" "setResultTypeI32"     importDynamic
+() ()        "EasyDll" "setResultTypeI64"     importDynamic
+() ()        "EasyDll" "setResultTypeN8"      importDynamic
+() ()        "EasyDll" "setResultTypeN16"     importDynamic
+() ()        "EasyDll" "setResultTypeN32"     importDynamic
+() ()        "EasyDll" "setResultTypeN64"     importDynamic
+() ()        "EasyDll" "setResultTypeNX"      importDynamic
+() ()        "EasyDll" "setResultTypeR32"     importDynamic
+() ()        "EasyDll" "setResultTypeR64"     importDynamic
+() ()        "EasyDll" "setResultTypeSTR"     importDynamic
+
+{ liraryName: ""; procName: "";} { procLocation: 0nx;} "EasyDll" "getLocation"          importDynamic
+() {value: FALSE;}    "EasyDll" "hasFileSystem"        importDynamic
+() {value: FALSE;}    "EasyDll" "hasDynamicImporter"   importDynamic
+{procLocation: 0nx;} ()      "EasyDll" "DLLcallImportedFunction" importDynamic
+
+{ lpFileName:"";
+  dwDesiredAccess: 0i32;
+  dwShareMode: 0i32;
+  lpSecurityAttributes: 0nx;
+  dwCreationDisposition: 0i32;
+  dwFlagsAndAttributes: 0i32;
+  hTemplateFile: 0nx;}
+{ hFile: 0nx; }
+"Kernel32" "CreateFileA"   importDynamic
+
+{ hFile: 0nx;
+  lpFileSize: 0nx;  }
+{ result: 0n32; }
+ "Kernel32" "GetFileSizeEx" importDynamic
+
+{
+  hFile: 0nx;
+  lpBuffer: 0nx;
+  nNumberOfBytesToRead: 0n32;
+  lpNumberOfBytesRead: 0nx;
+  lpOverlapped: 0nx;
+}
+()
+"Kernel32" "ReadFile"      importDynamic
+
+{ hFile: 0nx;}
+()
+"Kernel32" "CloseHandle"   importDynamic
+
+()
+{errorCode: 0n32;}
+"Kernel32" "GetLastError"  importDynamic
+
+WindowsSystem: {
+  loadFile: [
+    name:;
+    NULL: 0nx;
+    GENERIC_READ: 0x80000000;
+    FILE_SHARE_READ: 0x00000001;
+    OPEN_EXISTING: 3i32;
+    fileHandle:  name GENERIC_READ FILE_SHARE_READ NULL OPEN_EXISTING 0i32 NULL CreateFileA;
+    fileHandle 0xffffffffnx = [
+#      "Load file " name & " error " & print GetLastError print LF print
+      FALSE
+    ] [
+      fileSizePointer: 8n32 allocateMemory;
+      fileSize: 0n32 fileHandle fileSizePointer GetFileSizeEx drop fileSizePointer readMemory;
+      stringPointer:  fileSize 1n32 + allocateMemory;
+      0n8 stringPointer fileSize 0nx cast + writeMemory
+      fileHandle stringPointer fileSize fileSizePointer NULL ReadFile
+      fileHandle CloseHandle
+      stringPointer fileSize memoryToText
+      stringPointer freeMemory
+      fileSizePointer freeMemory
+      TRUE
+    ] if
+  ] func;
+
+  hasImportDynamic: TRUE;
+
+  hasFileSystem: TRUE;
+
+  getFuncPtr: [ getLocation ] func;
+
+  pushArg: [ ""      same] [pushArgSTR] pfunc;
+  pushArg: [ 0i8     same] [pushArgI8 ] pfunc;
+  pushArg: [ 0i16    same] [pushArgI16] pfunc;
+  pushArg: [ 0i32    same] [pushArgI32] pfunc;
+  pushArg: [ 0i64    same] [pushArgI64] pfunc;
+  pushArg: [ 0n8     same] [pushArgN8 ] pfunc;
+  pushArg: [ 0n16    same] [pushArgN16] pfunc;
+  pushArg: [ 0n32    same] [pushArgN32] pfunc;
+  pushArg: [ 0n64    same] [pushArgN64] pfunc;
+  pushArg: [ 0nx     same] [pushArgNX ] pfunc;
+  pushArg: [ 0.0r32  same] [pushArgR32] pfunc;
+  pushArg: [ 0.0r64  same] [pushArgR64] pfunc;
+
+  setResultType: [ ""      same] [drop setResultTypeSTR] pfunc;
+  setResultType: [ 0i8     same] [drop setResultTypeI8 ] pfunc;
+  setResultType: [ 0i16    same] [drop setResultTypeI16] pfunc;
+  setResultType: [ 0i32    same] [drop setResultTypeI32] pfunc;
+  setResultType: [ 0i64    same] [drop setResultTypeI64] pfunc;
+  setResultType: [ 0n8     same] [drop setResultTypeN8 ] pfunc;
+  setResultType: [ 0n16    same] [drop setResultTypeN16] pfunc;
+  setResultType: [ 0n32    same] [drop setResultTypeN32] pfunc;
+  setResultType: [ 0n64    same] [drop setResultTypeN64] pfunc;
+  setResultType: [ 0nx     same] [drop setResultTypeNX ] pfunc;
+  setResultType: [ 0.0r32  same] [drop setResultTypeR32] pfunc;
+  setResultType: [ 0.0r64  same] [drop setResultTypeR64] pfunc;
+
+  getResult: [ ""      same] [drop getResultSTR] pfunc;
+  getResult: [ 0i8     same] [drop getResultI8 ] pfunc;
+  getResult: [ 0i16    same] [drop getResultI16] pfunc;
+  getResult: [ 0i32    same] [drop getResultI32] pfunc;
+  getResult: [ 0i64    same] [drop getResultI64] pfunc;
+  getResult: [ 0n8     same] [drop getResultN8 ] pfunc;
+  getResult: [ 0n16    same] [drop getResultN16] pfunc;
+  getResult: [ 0n32    same] [drop getResultN32] pfunc;
+  getResult: [ 0n64    same] [drop getResultN64] pfunc;
+  getResult: [ 0nx     same] [drop getResultNX ] pfunc;
+  getResult: [ 0.0r32  same] [drop getResultR32] pfunc;
+  getResult: [ 0.0r64  same] [drop getResultR64] pfunc;
+
+  callImportedFunction: [
+    ins:out:ptr:;;;
+    ins [pushArg] each
+    out fieldCount 1 = [
+      TRUE setHasResult
+      0 out @ setResultType
+      ptr DLLcallImportedFunction
+      0 out @ getResult
+      TRUE
+    ] [
+      FALSE setHasResult
+      ptr DLLcallImportedFunction
+      ()
+      FALSE
+    ] if
+    clearArgs
+  ] func;
+};

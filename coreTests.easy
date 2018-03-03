@@ -1,0 +1,333 @@
+"sl/control" useFile
+println: [ print LF print ] func;
+printlf: [ LF print ] func;
+printsp: [ print " " print ] func;
+dlist: [ { DIE:; } ]  func;
+assert: [ ~ [ ASSERTION_FAILED ] when ] func;
+pass: [ "Test" printsp printsp "passed" println ] func;
+++: [ dup " 1 + !" & swap & call] func;
+
+"Combined tests"  println
+[ () ] call toText "( )" = assert
+1 pass
+
+[ ( 1 ) ] call toText "( 1 )" = assert
+2 pass
+
+[ 1 ( a:; a a ) ] call toText "( 1 1 )" = assert
+3 pass
+
+[ 1 ( a:; ) ] call toText "( )" =  assert
+4 pass
+
+[ ((())) ] call toText "( ( ( ) ) )" = assert
+5 pass
+
+[ ( 1 () ) ] call toText "( 1 ( ) )" = assert
+6 pass
+
+[ "padd " "padd" (a:;) ] call toText & "padd ( )" = assert
+7 pass
+
+[ {} ] call toText "( )" = assert
+8 pass
+
+[ { a: 1; } ] call  toText "{ a: 1; }" = assert
+9 pass
+
+[ { a: { a: 2; }; } ] call toText "{ a: { a: 2; }; }" = assert
+10 pass
+"Combined tests" " passed." & println printlf
+
+"PRE and DIE tests"  println
+[
+  pcount: 0;
+  cnum: 0;
+  a: [3 !cnum drop] func;
+  a: [ pcount 1 + !pcount 2 = ] [ 2 !cnum drop] pfunc;
+  a: [ pcount 1 + !pcount 1 = ] [ 1 !cnum  drop] pfunc;
+  1 a pcount 1 = cnum 1 = and assert
+  0 !pcount 0 !cnum
+  2 a pcount 2 = cnum 2 = and assert
+  0 !pcount 0 !cnum
+  3 a pcount 2 = cnum 3 = and assert
+] call
+1 pass
+
+[
+  b: 1;
+  b: [FALSE][] pfunc;
+  b 1  = assert
+] call
+2 pass
+
+[
+  index: 0;
+  [
+    c: [
+      1 !index
+      a: [
+        [ 3 !index error 4 !index] call
+      ]  dlist;
+      2 !index
+    ] dlist;
+  ] call
+  index 3 = assert
+] call
+3 pass
+
+
+[
+  0
+  [ a: {
+      DIE: 1;
+    };
+  ] call
+  0 = assert
+] call
+4 pass
+
+[
+  0
+  [ a: {
+      DIE: "1 println";
+    };
+  ] call
+  0 = assert
+] call
+5 pass
+
+[
+  0
+  [
+    a: {
+      DIE: [2 3 +] func;
+    };
+  ] call
+  0 = assert
+] call
+6 pass
+
+"PRE and DIE tests" " passed." & println printlf
+
+
+"Loop tests" println
+[ i: 0; [
+    i 1 + !i
+    i 5 < ] loop
+  i 5 = assert
+] call
+1 pass
+
+# Disabled in latest versions of mpli-c
+#[ a: {
+#    CALL: [
+#      i 1 + !i
+#      i 5 < ];
+#  };
+#  i: 0; @a loop
+#  i 5 = assert
+#] call
+#2 pass
+"Loop tests" " passed." & println printlf
+
+"Builtins tests" println
+[
+  "te" "st" & "test" = assert
+  1 pass
+  1 0 array toText "( )" = assert
+
+  2 pass
+  a: 0;
+  [1 !a] dlist 0 array toText "( )" =  a 1 = and assert
+  3 pass
+
+  1 2 and 0 = assert
+  4 pass
+
+  1 2 array toText "( 1 1 )" = assert
+  5 pass
+
+  { a: 1; } 2 array toText "( { a: 1; } { a: 1; } )" = assert
+  6 pass
+
+  0.0 asin 0.0 = assert
+  7 pass
+
+  2 3 * 6 = assert
+  8 pass
+
+  l: ( 1 [ 2 ]  "3" );
+  0 l @ 1 = assert
+  9 pass
+
+  1 l @ call 2 = assert
+  10 pass
+
+  2 l @ "3" = assert
+  11 pass
+
+  FALSE [FALSE] [TRUE] if assert
+  12 pass
+
+  TRUE [TRUE] [FALSE] if assert
+  13 pass
+
+  1.0 acos 0.0 = assert
+  14 pass
+
+  3 l 5 , @ 5 = assert
+  15 pass
+
+  obj: {
+    a: 1;
+    b: 2;
+  };
+
+  obj fieldCount 2 = assert
+  16 pass
+
+  var: 1;
+  [2 !var] dlist fieldCount 1 =  var 2 = and assert
+  17 pass
+
+  obj "a" has assert
+  18 pass
+
+  obj "c" has ~ assert
+  19 pass
+
+  1 !var
+  [2 !var] dlist "q" has ~ var 2 = and assert
+  20 pass
+
+  sum: 0;
+  [sum 1 + !sum] call
+  [sum 1 + !sum] func call
+  sum 2 = assert
+  21 pass
+
+  b: 1;
+  a: { a: 1; DIE: [1 b + !b]; };
+  c: a copy;
+  2 c .!a a .a 1 = assert
+  2 !c b 2 = assert
+  2 !a b 3 = assert
+  22 pass
+
+
+  0 !b
+  list: (1 [1 b + !b] dlist 3);
+  2 0 list ! 0 list @ 2 = assert
+  1 1 list ! b 1 = assert
+  23 pass
+
+  0 !b
+  [2 !b] dlist 0 fieldName "DIE" = b 2 = and assert
+  a: { a: 1; };
+  a 0 fieldName "a" = assert
+  24 pass
+
+  0 !b
+  a: {
+    d: 1;
+    c: [b + !b] func;
+  };
+  2 "e" a insert a .e 2 = assert
+  [1 =] [drop -1 !b] pfunc "c" a insert
+  2 a .c b  2 = assert
+  1 a .c b -1 = assert
+  25 pass
+
+  a: {};
+  a a is assert
+  a a copy is ~ assert
+  c: 0;
+  [1 c + !c] dlist dup is c 1 = and assert
+  1 [2 !c] dlist is ~ c 2 = and assert
+  1 () is ~ assert
+  26 pass
+
+  0 !c
+  a: {
+    a: 1;
+    b: [1 !c] dlist;
+    d: [ "d" self remove] func;
+  };
+  a .d a fieldCount 2 = c 0 = and assert
+  "b" a remove a fieldCount 1 = c 1 = and assert
+  obj: ["CALL" @closure remove] func;
+  obj obj fieldCount 0 = assert
+  1 2 3 4 5 6 7 8
+  obj: {
+    a:; b:; c:; d:; e:; f:; g:; h:;
+  };
+  0i8 obj remove obj "a" has ~ obj fieldCount 7 = and assert
+  0i16 obj remove obj "b" has ~ obj fieldCount 6 = and assert
+  0i32 obj remove obj "c" has ~ obj fieldCount 5 = and assert
+  0i64 obj remove  obj "d" has ~ obj fieldCount 4 = and assert
+  0n8 obj remove obj "e" has ~ obj fieldCount 3 = and assert
+  0n16 obj remove obj "f" has ~ obj fieldCount 2 = and assert
+  0n32 obj remove obj "g" has ~ obj fieldCount 1 = and assert
+  0n64 obj remove obj "h" has ~ obj fieldCount 0 = and assert
+  1 "ab" obj insert
+  "a" "b" & obj remove  obj fieldCount 0 = assert
+  27 pass
+
+#  ( 0nx ) (0n32) "AnotherDllTest" "getValueSquare" importDynamic
+#  ( 0i64) (0i64) "AnotherDllTest" "powerTen" importDynamic
+#  intptr: 4 allocateMemory;
+#  2 intptr writeMemory
+#  intptr getValueSquare 4n32 = assert
+#  0n32 intptr readMemory 0i64 cast powerTen 1024i64 = assert
+#  intptr freeMemory
+#  "123456789" textMemoryPointer 5 memoryToText "12345" = assert
+#  28 pass
+
+  1 2 - -1 = assert
+] call
+
+"Builtins tests passed." println  printlf
+
+"Processors Name* NameMember* tests" println
+[
+  obj: {
+    field: 1;
+    field: 2;
+    listfield: [ "dead" !var] dlist;
+    method: [ 0 * ] func;
+    method: [ 2 = ] [drop 4 ] pfunc;
+    method: [ 1 = ] [drop 3 ] pfunc;
+  };
+
+  obj .field 2 = assert
+  1 pass
+
+  1 obj .method  3 = assert
+  2 pass
+
+  2 obj .method  4 = assert
+  3 pass
+
+  3 obj .method  0 = assert
+  4 pass
+
+  3 obj .!field
+  5 pass
+
+  obj .field 3 = assert
+  6 pass
+
+  obj .@method toText "{ CALL: [CODE]; PRE: [CODE]; }" = assert
+  7 pass
+
+  var: "alive";
+  {} obj .!listfield var "dead" = assert
+  8 pass
+
+  obj2: ["dead2" !var] dlist;
+  1 !obj2 var "dead2" = assert
+  9 pass
+
+] call
+"Processors Name* NameMember* tests passed." println printlf

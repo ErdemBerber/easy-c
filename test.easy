@@ -1,0 +1,5 @@
+"EasyCompiler" useFile
+"windowssystem" useFile
+
+compiler: WindowsSystem EasyCompiler;
+( "." ) "test.easy" compiler.start

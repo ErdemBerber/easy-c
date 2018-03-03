@@ -1,0 +1,169 @@
+# Depends: "sl/algorithm" useFile
+# Depends: "sl/array" useFile
+# Depends: "../imperativeParser" useFile
+
+# Load MPL file, parse it and produce AST tree.
+# File search paths are probed from back to front.
+# input:
+#   system - object to use for system interactions
+#   searchPaths - array of texts representing folder paths to search for file, either absolute ('' (root), '/folder0'...) or relative ('.' (current), '..' (parent), 'folder0', '../../folder0'...)
+#   filename - text containing relative path of the file to load, like 'file0', 'folder0/file0' or '../file0'. Absolute paths are not allowed.
+# output:
+#   text containing folder path of the loaded file
+#   text containing path of the loaded file
+#   array of AST tree root nodes
+#   TRUE
+#   -- or --
+#   text containing error message
+#   FALSE
+loadMPLFile: [
+  system: searchPaths: filename:;;;
+  system.hasFileSystem ~ [
+    "filesystem is not available" FALSE
+  ] [
+    loadMPLFileLoadFile ~ [
+      "unable to load file \"" filename & "\"" & FALSE
+    ] [
+      data:; filename:; path:;
+      parseResult: data filename parseString;
+      parseResult "data" has ~ [
+        filename "(" & parseResult.line toText & "," & parseResult.column toText & "): syntax error, " & parseResult.message & LF & FALSE
+      ] [
+        #"File \"" filename & "\" loaded, path: \"" & path & "\"" & LF & print
+        path filename parseResult.data TRUE
+      ] if
+    ] if
+  ] if
+] func;
+
+loadMPLFileDecomposePath: [
+  components: ();
+  current: "";
+  textSplit [
+    codePoint:; codePoint "/" = [
+      components current , drop "" !current
+    ] [
+      current codePoint & !current
+    ] if
+  ] each
+  components current ,
+] func;
+
+loadMPLFileProcessFilename: [
+  loadMPLFileDecomposePath components:;
+  component: components fieldCount 1 - components @; component "" = [ component "." = ] || [ component ".." = ] || ~ [
+    parentCount: 0;
+    filename: components untail nip;
+    i: 0; [
+      i components fieldCount = [
+        parentCount "" filename TRUE FALSE
+      ] [
+        i components @ !component component "" = [ component "." = ] || [
+          FALSE FALSE
+        ] [
+          i 1 + !i
+          component ".." = [
+            parentCount 1 + !parentCount TRUE
+          ] [
+            path: component;
+            [
+              i components fieldCount = [
+                parentCount path filename TRUE FALSE
+              ] [
+                i components @ !component component "" = [ component "." = ] || [ component ".." = ] || [
+                  FALSE FALSE
+                ] [
+                  path "/" & component & !path i 1 + !i TRUE
+                ] if
+              ] if
+            ] loop
+            FALSE
+          ] if
+        ] if
+      ] if
+    ] loop
+  ] &&
+] func;
+
+loadMPLFileProcessPath: [
+  stripCount:;
+  loadMPLFileDecomposePath components:;
+  newComponents: ( 0 components @ );
+  i: 1; [
+    i components fieldCount = [
+      TRUE FALSE
+    ] [
+      component: i components @; component "" = [ component "." = ] || [
+        i 1 + !i TRUE
+      ] [
+        previousComponent: newComponents fieldCount 1 - newComponents @;
+        previousComponent "." = [
+          component newComponents fieldCount 1 - newComponents ! i 1 + !i TRUE
+        ] [
+          previousComponent ".." = [ component ".." = ~ ] || [
+            newComponents component , drop i 1 + !i TRUE
+          ] [
+            previousComponent "" = [
+              FALSE FALSE
+            ] [
+              newComponents fieldCount 1 = [ "." 0 newComponents ! ] [ newComponents untail drop drop ] if
+              i 1 + !i TRUE
+            ] if
+          ] if
+        ] if
+      ] if
+    ] if
+  ] loop
+  [
+    0 !i [
+      i stripCount = [
+        TRUE FALSE
+      ] [
+        previousComponent: newComponents fieldCount 1 - newComponents @;
+        previousComponent "" = [
+          FALSE FALSE
+        ] [
+          previousComponent "." = [
+            ".." newComponents fieldCount 1 - newComponents !
+          ] [
+            previousComponent ".." = [
+              newComponents ".." , drop
+            ] [
+              newComponents fieldCount 1 = [ "." 0 newComponents ! ] [ newComponents untail drop drop ] if
+            ] if
+          ] if
+          i 1 + !i TRUE
+        ] if
+      ] if
+    ] loop
+  ] &&
+  dup [
+    0 newComponents @ 1 !i [ i newComponents fieldCount = ~ ] [ "/" & i newComponents @ & i 1 + !i ] while
+    swap
+  ] when
+] func;
+
+loadMPLFileLoadFile: [
+  filename loadMPLFileProcessFilename [
+    filename:; filepath:; stripCount:;
+    i: searchPaths fieldCount; [
+      i 0 = [
+        FALSE FALSE
+      ] [
+        i 1 - !i
+        i searchPaths @ stripCount loadMPLFileProcessPath [
+          path:;
+          filepath "" = ~ [ path "." = [ filepath ] [ path "/" & filepath & ] if !path ] when
+          fullFilename: path "." = [ filename ] [ path copy "/" & filename & ] if;
+          fullFilename system.loadFile [
+            data:; path fullFilename data TRUE FALSE
+          ] [
+            TRUE
+          ] if
+        ] [
+          TRUE
+        ] if
+      ] if
+    ] loop
+  ] &&
+] func;

@@ -1,0 +1,113 @@
+"sl/algorithm" useFile
+"sl/array" useFile
+"llvm/module" useFile
+"exception" useFile
+"util" useFile
+"imperativeParser" useFile
+"loadMPLFile" useFile
+"passCompile" useFile
+"passInlineLabels" useFile
+"passInlineUsedFiles" useFile
+"passProcessStrings" useFile
+
+EasyCompiler: [{
+    system:;
+    parser: {"imperativeParser" useFile};
+    module: "test" LLVMModule;
+
+    ArchType.x86 module.dataLayout.!arch
+    VendorType.PC module.dataLayout.!vendor
+    OSType.Win32 module.dataLayout.!ostype
+    EnvironmentType.MSVC module.dataLayout.!environment
+
+    Endian.Little module.dataLayout.!endian
+    Mangling.Winx86 module.dataLayout.!mangling
+    32 32 Alignment.Pointer module.dataLayout.appendAlign
+    64 64 Alignment.Integer module.dataLayout.appendAlign
+    80 32 Alignment.Float module.dataLayout.appendAlign
+    8 16 32 AlignmentPrefer.Natural module.dataLayout.appendAlign
+    0 32 Alignment.Aggregate module.dataLayout.appendAlign
+    32 module.dataLayout.!stack
+
+    translateOffset: [
+      text: offset:; textSplit;
+      i: 0;
+      line: 1;
+      column: 1;
+      [ i offset < ] [
+        i text @ LF = [ line 1 + !line 1 !column ] [ column 1 + !column ] if
+        i 1 + !i
+      ] while
+      line column
+    ] func;
+
+    start: [
+      searchPaths: filename:;;
+      searchPaths "." , drop
+      [
+        #"loading main file..." LF & print
+        system searchPaths filename loadMPLFile ~ [ throw ] when nodes:; !filename searchPaths fieldCount 1 - searchPaths !
+
+        #"inlining used files..." LF & print
+        system searchPaths filename nodes passInlineUsedFiles ~ [ throw ] when !nodes
+
+        textInfoType: "TextInfo" 8 IntegerType 28 ArrayType module.insertTypeAlias;
+        textEntryType: "TextEntry" 8 IntegerType 56 ArrayType module.insertTypeAlias;
+        sourceTextType: "SourceText" ( textEntryType PointerType 32 IntegerType ) StructType module.insertTypeAlias;
+        machineCodeType: "MachineCode" 1 IntegerType () FunctionType PointerType module.insertTypeAlias;
+
+        #filenameText: "filename" 8 IntegerType filename textMemorySize ArrayType filename module.insertGlobalConstant;
+
+        handleError: "handleError" VoidType ( 8 IntegerType PointerType 32 IntegerType 32 IntegerType 32 IntegerType 8 IntegerType PointerType 32 IntegerType ) module.getOrInsertFunctionDeclaration;
+        processConstantInt8:    "processConstantInt8"    VoidType      (  8 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantInt16:   "processConstantInt16"   VoidType      ( 16 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantInt32:   "processConstantInt32"   VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantInt64:   "processConstantInt64"   VoidType      ( 64 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantIntX:    "processConstantIntX"    VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantNat8:    "processConstantNat8"    VoidType      (  8 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantNat16:   "processConstantNat16"   VoidType      ( 16 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantNat32:   "processConstantNat32"   VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantNat64:   "processConstantNat64"   VoidType      ( 64 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantNatX:    "processConstantNatX"    VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+        processConstantReal32:  "processConstantReal32"  VoidType      ( 32 FloatType               ) module.getOrInsertFunctionDeclaration;
+        processConstantReal64:  "processConstantReal64"  VoidType      ( 64 FloatType               ) module.getOrInsertFunctionDeclaration;
+        processText:            "processText"            VoidType      ( sourceTextType PointerType ) module.getOrInsertFunctionDeclaration;
+        processListCodeBegin:   "processListCodeBegin"   1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+        processObjectCodeBegin: "processObjectCodeBegin" 1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+        processMachineCode:     "processMachineCode"     1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+        processLabel:           "processLabel"           1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processName:            "processName"            1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processNameRead:        "processNameRead"        1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processNameWrite:       "processNameWrite"       1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processNameMember:      "processNameMember"      1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processNameReadMember:  "processNameReadMember"  1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        processNameWriteMember: "processNameWriteMember" 1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+        initTextEntry: "initTextEntry" VoidType ( textEntryType PointerType 8 IntegerType PointerType 32 IntegerType ) module.getOrInsertFunctionDeclaration;
+        initBuiltins: "initBuiltins" VoidType ( ) module.getOrInsertFunctionDeclaration;
+
+        tokens: HashTable;
+        texts: HashTable;
+
+        mplMain: "mplMain" 1 IntegerType ( ) module.getOrInsertFunction;
+        TRUE mplMain.!exported
+        function: mplMain;
+        builder: function.appendBasicBlock IRBuilder;
+
+        #"inlining labels..." LF & print
+        nodes passInlineLabels ~ [ throw ] when !nodes
+
+        #"processing strings..." LF & print
+        module builder.basicBlock nodes passProcessStrings ~ [ throw ] when !nodes
+
+        initBuiltins ( ) builder.addCall drop
+
+        #"compiling..." LF & print
+        module function nodes passCompile ~ [ throw ] when
+
+        #"producing IR..." LF & print
+        module.getIR print
+      ] [
+        print
+      ] catch
+    ] func;
+  }] func;

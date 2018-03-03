@@ -1,0 +1,128 @@
+"sl/algorithm" useFile
+"sl/array" useFile
+"../imperativeParser" useFile
+"../loadMPLFile" useFile
+"../windowssystem" useFile
+"support/listEqual" useFile
+
+[
+  "Test 1" LF & print
+  ( { hasFileSystem: FALSE; } ( ) "" loadMPLFile )
+  [
+    (
+      "filesystem is not available"
+      FALSE
+    ) =
+  ] assert "passed" LF & print
+] call
+
+[
+  "Test 2" LF & print
+  ( WindowsSystem ( "." ) "INVALID_FILE_NAME" loadMPLFile )
+  [
+    (
+      "unable to load file \"INVALID_FILE_NAME\""
+      FALSE
+    ) =
+  ] assert "passed" LF & print
+] call
+
+[
+  "Test 3" LF & print
+  ( WindowsSystem ( "." ) "support/loadMPLFileTest0.easy" loadMPLFile )
+  [
+    (
+      "support/loadMPLFileTest0.easy(3,7): syntax error, Wrong terminator, expected \";\", but found \"]\"" LF &
+      FALSE
+    ) =
+  ] assert "passed" LF & print
+] call
+
+[
+  "Test 4" LF & print
+  ( WindowsSystem ( "support" ) "loadMPLFileTest0.easy" loadMPLFile )
+  [
+    (
+      "support/loadMPLFileTest0.easy(3,7): syntax error, Wrong terminator, expected \";\", but found \"]\"" LF &
+      FALSE
+    ) =
+  ] assert "passed" LF & print
+] call
+
+[
+  "Test 5" LF & print
+  ( WindowsSystem ( "." ) "support/loadMPLFileTest1.easy" loadMPLFile )
+  [
+    (
+      "support"
+      "support/loadMPLFileTest1.easy"
+      (
+        { AST_NODE: ( ); NUMBERI8_NODE: ( ); token: "10i8"; value: 10i8; offset: 0; line: 1; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI16_NODE: ( ); token: "11i16"; value: 11i16; offset: 5; line: 1; column: 6; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "12i32"; value: 12i32; offset: 11; line: 1; column: 12; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI64_NODE: ( ); token: "13i64"; value: 13i64; offset: 17; line: 1; column: 18; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERIX_NODE: ( ); token: "14ix"; value: 14ix; offset: 23; line: 1; column: 24; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "15"; value: 15; offset: 28; line: 1; column: 29; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN8_NODE: ( ); token: "16n8"; value: 16n8; offset: 31; line: 2; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN16_NODE: ( ); token: "17n16"; value: 17n16; offset: 36; line: 2; column: 6; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN32_NODE: ( ); token: "18n32"; value: 18n32; offset: 42; line: 2; column: 12; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN64_NODE: ( ); token: "19n64"; value: 19n64; offset: 48; line: 2; column: 18; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERNX_NODE: ( ); token: "20nx"; value: 20nx; offset: 54; line: 2; column: 24; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "21"; value: 21; offset: 59; line: 2; column: 29; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); REAL32_NODE: ( ); token: "22.0r32"; value: 22.0r32; offset: 62; line: 3; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); REAL64_NODE: ( ); token: "23.0"; value: 23.0; offset: 70; line: 3; column: 9; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); STRING_NODE: ( ); value: "test"; token: "TEXT"; offset: 75; line: 4; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); LIST_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 84; line: 5; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "("; offset: 82; line: 5; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); OBJECT_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 93; line: 6; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "{"; offset: 91; line: 6; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); CODE_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 102; line: 7; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "["; offset: 100; line: 7; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); LABEL_NODE: ( ); children: ( ); name: "test"; token: "test:"; offset: 109; line: 8; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 116; line: 9; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEREAD_NODE: ( ); name: "test"; token: "@test"; nameInfo: ( ); offset: 121; line: 10; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEWRITE_NODE: ( ); name: "test"; token: "!test"; nameInfo: ( ); offset: 127; line: 11; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEMEMBER_NODE: ( ); name: "test"; token: ".test"; nameInfo: ( ); offset: 133; line: 12; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEREADMEMBER_NODE: ( ); name: "test"; token: ".@test"; nameInfo: ( ); offset: 139; line: 13; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEWRITEMEMBER_NODE: ( ); name: "test"; token: ".!test"; nameInfo: ( ); offset: 146; line: 14; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+      )
+      TRUE
+    ) =
+  ] assert "passed" LF & print
+] call
+
+[
+  "Test 6" LF & print
+  ( WindowsSystem ( "support" ) "loadMPLFileTest1.easy" loadMPLFile )
+  [
+    (
+      "support"
+      "support/loadMPLFileTest1.easy"
+      (
+        { AST_NODE: ( ); NUMBERI8_NODE: ( ); token: "10i8"; value: 10i8; offset: 0; line: 1; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI16_NODE: ( ); token: "11i16"; value: 11i16; offset: 5; line: 1; column: 6; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "12i32"; value: 12i32; offset: 11; line: 1; column: 12; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI64_NODE: ( ); token: "13i64"; value: 13i64; offset: 17; line: 1; column: 18; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERIX_NODE: ( ); token: "14ix"; value: 14ix; offset: 23; line: 1; column: 24; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "15"; value: 15; offset: 28; line: 1; column: 29; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN8_NODE: ( ); token: "16n8"; value: 16n8; offset: 31; line: 2; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN16_NODE: ( ); token: "17n16"; value: 17n16; offset: 36; line: 2; column: 6; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN32_NODE: ( ); token: "18n32"; value: 18n32; offset: 42; line: 2; column: 12; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERN64_NODE: ( ); token: "19n64"; value: 19n64; offset: 48; line: 2; column: 18; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERNX_NODE: ( ); token: "20nx"; value: 20nx; offset: 54; line: 2; column: 24; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NUMBERI32_NODE: ( ); token: "21"; value: 21; offset: 59; line: 2; column: 29; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); REAL32_NODE: ( ); token: "22.0r32"; value: 22.0r32; offset: 62; line: 3; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); REAL64_NODE: ( ); token: "23.0"; value: 23.0; offset: 70; line: 3; column: 9; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); STRING_NODE: ( ); value: "test"; token: "TEXT"; offset: 75; line: 4; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); LIST_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 84; line: 5; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "("; offset: 82; line: 5; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); OBJECT_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 93; line: 6; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "{"; offset: 91; line: 6; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); CODE_NODE: ( ); children: ( { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 102; line: 7; column: 3; filename: "support/loadMPLFileTest1.easy"; } ); token: "["; offset: 100; line: 7; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); LABEL_NODE: ( ); children: ( ); name: "test"; token: "test:"; offset: 109; line: 8; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAME_NODE: ( ); name: "test"; token: "test"; nameInfo: ( ); offset: 116; line: 9; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEREAD_NODE: ( ); name: "test"; token: "@test"; nameInfo: ( ); offset: 121; line: 10; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEWRITE_NODE: ( ); name: "test"; token: "!test"; nameInfo: ( ); offset: 127; line: 11; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEMEMBER_NODE: ( ); name: "test"; token: ".test"; nameInfo: ( ); offset: 133; line: 12; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEREADMEMBER_NODE: ( ); name: "test"; token: ".@test"; nameInfo: ( ); offset: 139; line: 13; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+        { AST_NODE: ( ); NAMEWRITEMEMBER_NODE: ( ); name: "test"; token: ".!test"; nameInfo: ( ); offset: 146; line: 14; column: 1; filename: "support/loadMPLFileTest1.easy"; }
+      )
+      TRUE
+    ) =
+  ] assert "passed" LF & print
+] call

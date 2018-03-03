@@ -1,0 +1,57 @@
+# Traverse AST tree to find all uses of text - tokens and names.
+# Create global constants for text.
+# Create global TextEntry variables and add calls to initialize TextEntry variables.
+# The original tree is not preserved.
+# input:
+#   module - LLVM module to add global variables
+#   block - LLVM basic block to add instructions
+#   nodes - array of AST tree root nodes
+# output:
+#   array of transformed AST nodes
+#   TRUE
+#   -- or --
+#   text containing error message
+#   FALSE
+passProcessStrings: [ module: block: nodes:;;;
+  initTextEntry: "initTextEntry" VoidType ( "TextEntry" module.getAlias PointerType 8 IntegerType PointerType 32 IntegerType ) module.getOrInsertFunctionDeclaration;
+  builder: block IRBuilder;
+  texts: HashTable;
+  textEntries: HashTable;
+
+  acquireTextConstant: [ global:;
+    global ( 0 32 IntegerType Constant 0 32 IntegerType Constant ) builder.addGEP
+    global.type.type.size 32 IntegerType Constant
+  ] func;
+
+  registerText: [ text:;
+    text texts.find ~ [
+      drop
+      global: 8 IntegerType text textMemorySize ArrayType text module.insertAnonymousConstant;
+      text global texts.insert
+      global
+    ] when
+  ] func;
+
+  registerTextEntry: [ text:;
+    text textEntries.find ~ [
+      drop
+      global: "TextEntry" module.getAlias module.insertAnonymousVariable;
+      initTextEntry ( global text registerText acquireTextConstant ) builder.addCall drop
+      text global textEntries.insert
+      global
+    ] when
+  ] func;
+
+  processNodes: [
+    [
+      node:;
+      node.filename registerText node.!filename
+      node.token registerText node.!token
+      node "name" has [ node.name registerTextEntry node.!name ] when
+      node "STRING_NODE" has [ node.value registerTextEntry node.!value ] when
+      node "children" has [ node.children processNodes ] when
+    ] each
+  ] func;
+
+  nodes processNodes nodes TRUE
+] func;

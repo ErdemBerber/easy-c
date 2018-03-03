@@ -1,0 +1,9 @@
+# Depends: "sl/control" useFile
+
+# Extract list entries and put them on stack
+# input:
+#   list containing zero or more entries
+# output:
+#   all the entries from the list
+unwrap: [ x: untail; unwrap @x ] func;
+unwrap: [ () same ] [ drop ] pfunc;

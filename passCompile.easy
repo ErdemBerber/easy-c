@@ -1,0 +1,111 @@
+# Traverse AST tree and compile it into LLVM code.
+# The original tree is preserved.
+# input:
+#   module - LLVM module
+#   function - starting LLVM function
+#   nodes - array of AST tree root nodes
+# output:
+#   TRUE
+#   -- or --
+#   text containing error message
+#   FALSE
+passCompile: [ module: function: nodes:;;;
+  processConstantInt8:    "processConstantInt8"    VoidType      (  8 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantInt16:   "processConstantInt16"   VoidType      ( 16 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantInt32:   "processConstantInt32"   VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantInt64:   "processConstantInt64"   VoidType      ( 64 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantIntX:    "processConstantIntX"    VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantNat8:    "processConstantNat8"    VoidType      (  8 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantNat16:   "processConstantNat16"   VoidType      ( 16 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantNat32:   "processConstantNat32"   VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantNat64:   "processConstantNat64"   VoidType      ( 64 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantNatX:    "processConstantNatX"    VoidType      ( 32 IntegerType             ) module.getOrInsertFunctionDeclaration;
+  processConstantReal32:  "processConstantReal32"  VoidType      ( 32 FloatType               ) module.getOrInsertFunctionDeclaration;
+  processConstantReal64:  "processConstantReal64"  VoidType      ( 64 FloatType               ) module.getOrInsertFunctionDeclaration;
+  processText:            "processText"            VoidType      ( sourceTextType PointerType ) module.getOrInsertFunctionDeclaration;
+  processListCodeBegin:   "processListCodeBegin"   1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+  processObjectCodeBegin: "processObjectCodeBegin" 1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+  processMachineCode:     "processMachineCode"     1 IntegerType ( machineCodeType            ) module.getOrInsertFunctionDeclaration;
+  processLabel:           "processLabel"           1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processName:            "processName"            1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processNameRead:        "processNameRead"        1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processNameWrite:       "processNameWrite"       1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processNameMember:      "processNameMember"      1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processNameReadMember:  "processNameReadMember"  1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  processNameWriteMember: "processNameWriteMember" 1 IntegerType ( textEntryType PointerType  ) module.getOrInsertFunctionDeclaration;
+  handleError: "handleError" VoidType ( 8 IntegerType PointerType 32 IntegerType 32 IntegerType 32 IntegerType 8 IntegerType PointerType 32 IntegerType ) module.getOrInsertFunctionDeclaration;
+  builder: function.basicBlocks.last IRBuilder;
+
+  acquireTextConstant: [ global:;
+    global ( 0 32 IntegerType Constant 0 32 IntegerType Constant ) builder.addGEP
+    global.type.type.size 32 IntegerType Constant
+  ] func;
+
+  callBuiltin: [ node:;
+    result: builder.addCall;
+    failure: function.appendBasicBlock;
+    success: function.appendBasicBlock;
+    result success failure builder.addBrCond
+    failure IRBuilder !builder
+    handleError ( node.filename acquireTextConstant node.line 32 IntegerType Constant node.column 32 IntegerType Constant node.token acquireTextConstant ) builder.addCall drop
+    0 1 IntegerType Constant builder.addRet
+    success IRBuilder !builder
+  ] func;
+
+  compileFunction: [ nodes:;
+    savedFunction: function;
+    savedBuilder: builder;
+    1 IntegerType ( ) module.insertAnonymousFunction !function
+    function.appendBasicBlock IRBuilder !builder
+    nodes compileNodes
+    function
+    savedBuilder !builder
+    savedFunction !function
+  ] func;
+
+  compileNode: [ drop ] func;
+  compileNode: [ "NUMBERI8_NODE"  has ] [ node:; processConstantInt8   ( node.value  8 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERI16_NODE" has ] [ node:; processConstantInt16  ( node.value 16 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERI32_NODE" has ] [ node:; processConstantInt32  ( node.value 32 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERI64_NODE" has ] [ node:; processConstantInt64  ( node.value 64 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERIX_NODE"  has ] [ node:; processConstantIntX   ( node.value 32 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERN8_NODE"  has ] [ node:; processConstantNat8   ( node.value  8 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERN16_NODE" has ] [ node:; processConstantNat16  ( node.value 16 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERN32_NODE" has ] [ node:; processConstantNat32  ( node.value 32 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERN64_NODE" has ] [ node:; processConstantNat64  ( node.value 64 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "NUMBERNX_NODE"  has ] [ node:; processConstantNatX   ( node.value 32 IntegerType Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "REAL32_NODE"    has ] [ node:; processConstantReal32 ( node.value 32 FloatType   Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "REAL64_NODE"    has ] [ node:; processConstantReal64 ( node.value 64 FloatType   Constant ) builder.addCall drop ] pfunc;
+  compileNode: [ "STRING_NODE" has ] [ node:;
+    sourceText: "SourceText" module.getAlias builder.allocOne;
+    sourceText ( 0 32 IntegerType Constant 0 32 IntegerType Constant ) builder.addGEP node.value builder.addStore
+    sourceText ( 0 32 IntegerType Constant 1 32 IntegerType Constant ) builder.addGEP node.offset 32 IntegerType Constant builder.addStore
+    processText ( sourceText ) builder.addCall drop
+  ] pfunc;
+  compileNode: [ "LIST_NODE" has ] [ node:;
+    newFunction: node.children compileFunction;
+    processListCodeBegin ( newFunction FunctionPointer ) node callBuiltin
+  ] pfunc;
+  compileNode: [ "OBJECT_NODE" has ] [ node:;
+    newFunction: node.children compileFunction;
+    processObjectCodeBegin ( newFunction FunctionPointer ) node callBuiltin
+  ] pfunc;
+  compileNode: [ "CODE_NODE" has ] [ node:;
+    newFunction: node.children compileFunction;
+    processMachineCode ( newFunction FunctionPointer ) builder.addCall drop
+  ] pfunc;
+  compileNode: [ "LABEL_NODE"           has ] [ node:; processLabel           ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAME_NODE"            has ] [ node:; processName            ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAMEREAD_NODE"        has ] [ node:; processNameRead        ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAMEWRITE_NODE"       has ] [ node:; processNameWrite       ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAMEMEMBER_NODE"      has ] [ node:; processNameMember      ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAMEREADMEMBER_NODE"  has ] [ node:; processNameReadMember  ( node.name ) node callBuiltin ] pfunc;
+  compileNode: [ "NAMEWRITEMEMBER_NODE" has ] [ node:; processNameWriteMember ( node.name ) node callBuiltin ] pfunc;
+
+  compileNodes: [
+    [ compileNode ] each
+    1 1 IntegerType Constant builder.addRet
+  ] func;
+
+  nodes compileNodes TRUE
+] func;

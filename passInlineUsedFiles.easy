@@ -1,0 +1,55 @@
+# Depends: "sl/algorithm" useFile
+# Depends: "sl/array" useFile
+# Depends: "../exception" useFile
+# Depends: "../imperativeParser" useFile
+# Depends: "../loadMPLFile" useFile
+# Depends: "../util" useFile
+
+# Traverse AST tree, find places where 'useFile' is called, load used files and inline them.
+# The original tree is not preserved.
+# input:
+#   system - object to use for system interactions
+#   searchPaths - array of texts representing paths to search for file
+#   filename - text containing path of the file
+#   nodes - array of AST tree root nodes
+# output:
+#   array of transformed AST nodes
+#   TRUE
+#   -- or --
+#   text containing error message
+#   FALSE
+passInlineUsedFiles: [ system: searchPaths: filename: nodes:;;;;
+  [ nodes passInlineUsedFiles' TRUE ] [ FALSE ] catch
+] func;
+
+passInlineUsedFiles': [
+  nodes:;
+  newNodes: ();
+  i: 0; [ i nodes fieldCount < ] [
+    node: i nodes @;
+    node "NAME_NODE" has [ node.name "useFile" = ] && [
+      i 0 = [ "useFile is a first node" filename node.line node.column "useFile" passInlineUsedFilesHandleError throw ] when
+      name: i 1 - nodes @;
+      name "STRING_NODE" has ~ [ "useFile is not preceded by file name" filename node.line node.column "useFile" passInlineUsedFilesHandleError throw ] when
+      otherFilename: name.value ".easy" &;
+      system searchPaths otherFilename loadMPLFile ~ [ filename node.line node.column "useFile" passInlineUsedFilesHandleError throw ] when otherNodes:; !otherFilename otherPath:;
+      system searchPaths copy untail drop otherPath , otherFilename otherNodes passInlineUsedFiles ~ [ filename node.line node.column "useFile" passInlineUsedFilesHandleError throw ] when !otherNodes
+      newNodes untail drop drop
+      newNodes otherNodes [ , ] each drop
+    ] [
+      node "children" has [ node.children passInlineUsedFiles' node.!children ] when
+      newNodes node , drop
+    ] if
+    i 1 + !i
+  ] while
+  newNodes
+] func;
+
+passInlineUsedFilesHandleError: [
+  message: filename: line: column: token:;;;;;
+  message textSplit untail nip LF = [
+    message filename & "(" & line toText & "," & column toText & "): [" & token & "], called from here" & LF &
+  ] [
+    filename "(" & line toText & "," & column toText & "): error, [" & token & "], " & message & LF &
+  ] if
+] func;

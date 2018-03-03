@@ -1,0 +1,14 @@
+10i8 11i16 12i32 13i64 14ix 15
+16n8 17n16 18n32 19n64 20nx 21
+22.0r32 23.0
+"test"
+( test )
+{ test }
+[ test ]
+test:;
+test
+@test
+!test
+.test
+.@test
+.!test

@@ -1,0 +1,30 @@
+# Depends: "sl/control" useFile
+# Depends: "../util" useFile
+
+# Exception handling implementation on top of PRE mechanics
+
+thisException: ();
+catchStorage: ();
+
+# Abort current control flow and jump to the innermost catch handler.
+# If there are no catch handlers in the execution stack, terminate program.
+# One item is taken from stack and transferred to handler stack.
+# input:
+#   object to transfer to exception handler stack
+# output:
+#   object is retained in new execution point
+throw: [ dup !thisException THROW ] func;
+
+# Install exception handler and execute callable that can potentially throw.
+# In case callable does not throw, it stack is preserved.
+# In case callable throws, one object is taken from the callable stack by the 'throw' function and handler is executed with this object placed on top of stack.
+# Stack is preserved after leaving exception handler.
+# input:
+#   callable to execute
+#   callable exception handler
+# output:
+#   zero or more objects from callable stack, if callable did not throw
+#   -- or --
+#   zero or more objects from handler stack, if callable thrown
+catch: [ nip thisException () !thisException swap call ] func;
+catch: [ drop ( call ) !catchStorage TRUE ] [ drop drop @catchStorage unwrap ] pfunc;

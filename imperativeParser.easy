@@ -1,0 +1,850 @@
+"sl/control" useFile
+
+#AST Nodes
+LabelNode:[{
+  AST_NODE:();
+  LABEL_NODE:();
+  children:;
+  name:;
+  token: name copy ":" &;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+CodeNode:[{
+  AST_NODE:();
+  CODE_NODE:();
+  children:;
+  token: "[";
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+ObjectNode:[{
+  AST_NODE:();
+  OBJECT_NODE:();
+  children:;
+  token: "{";
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+ListNode:[{
+  AST_NODE:();
+  LIST_NODE:();
+  children:;
+  token: "(";
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameNode:[{
+  AST_NODE:();
+  NAME_NODE:();
+  name:;
+  token: name;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameReadNode:[{
+  AST_NODE:();
+  NAMEREAD_NODE:();
+  name:;
+  token: "@" name &;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameWriteNode:[{
+  AST_NODE:();
+  NAMEWRITE_NODE:();
+  name:;
+  token: "!" name &;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameMemberNode:[{
+  AST_NODE:();
+  NAMEMEMBER_NODE:();
+  name:;
+  token: "." name &;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameReadMemberNode:[{
+  AST_NODE:();
+  NAMEREADMEMBER_NODE:();
+  name:;
+  token: ".@" name &;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NameWriteMemberNode:[{
+  AST_NODE:();
+  NAMEWRITEMEMBER_NODE:();
+  name:;
+  token: ".!" name &;
+  nameInfo: ();
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+StringNode:[{
+  AST_NODE:();
+  STRING_NODE:();
+  value:;
+  token: "TEXT";
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numberi8Node:[{
+  AST_NODE:();
+  NUMBERI8_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numberi16Node:[{
+  AST_NODE:();
+  NUMBERI16_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numberi32Node:[{
+  AST_NODE:();
+  NUMBERI32_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numberi64Node:[{
+  AST_NODE:();
+  NUMBERI64_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NumberixNode:[{
+  AST_NODE:();
+  NUMBERIX_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numbern8Node:[{
+  AST_NODE:();
+  NUMBERN8_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numbern16Node:[{
+  AST_NODE:();
+  NUMBERN16_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numbern32Node:[{
+  AST_NODE:();
+  NUMBERN32_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Numbern64Node:[{
+  AST_NODE:();
+  NUMBERN64_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+NumbernxNode:[{
+  AST_NODE:();
+  NUMBERNX_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Real32Node:[{
+  AST_NODE:();
+  REAL32_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+Real64Node:[{
+  AST_NODE:();
+  REAL64_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+DestructNode:[{
+  AST_NODE:();
+  DESTRUCT_NODE:();
+  token:;
+  value:;
+  offset: lastOffset;
+  line: lastLine;
+  column: lastColumn;
+  filename:filenameID;
+}] func;
+
+eof: 26n8;
+
+cr: 13n8;
+lf: 10n8;
+space: 32n8;
+exclamation: 33n8;
+quote: 34n8;
+grid: 35n8;
+openRBr: 40n8;
+closeRBr: 41n8;
+openSBr: 91n8;
+closeSBr: 93n8;
+openFBr: 123n8;
+closeFBr: 125n8;
+plus: 43n8;
+comma: 44n8;
+minus: 45n8;
+dot: 46n8;
+zero: 48n8;
+colon: 58n8;
+semicolon: 59n8;
+dog: 64n8;
+backSlash: 92n8;
+# it is for numbers
+aCode: 97n8;
+aCodeBig: 65n8;
+eCode: 101n8;
+eCodeBig: 69n8;
+iCode: 105n8;
+nCode: 110n8;
+rCode: 114n8;
+xCode: 120n8;
+
+makeLookupTable: [
+  result: FALSE 256 makeArray;
+  [n: 0 cast; TRUE n result !] each
+  result
+] func;
+
+joinLookupTables: [
+  left:right:;;
+  result: FALSE 256 makeArray;
+  256 [
+    i left.at i right.at or i result.set
+  ] times
+  result
+] func;
+
+starters: (openRBr openSBr openFBr) makeLookupTable;
+terminators: (eof closeRBr closeSBr closeFBr semicolon) makeLookupTable;
+digits: (10 [zero i 0n8 cast +] times) makeLookupTable;
+numberSigns: (plus minus) makeLookupTable;
+specials: (space cr lf colon grid) makeLookupTable starters joinLookupTables terminators joinLookupTables;
+begExp: (eCode eCodeBig) makeLookupTable;
+endNumbers: specials (comma) makeLookupTable joinLookupTables;
+endNames: specials;
+
+hexDigits: (
+  10 [zero i 0n8 cast +] times
+  6 [aCode i 0n8 cast +] times
+  6 [aCodeBig i 0n8 cast +] times  
+) makeLookupTable;
+
+hexToInt: [
+  result: 255n8 256 makeArray;
+  10 [i 0n8 cast zero 0 cast i + result !] times
+  6  [i 0n8 cast 10n8 + aCode 0 cast i + result !] times
+  6  [i 0n8 cast 10n8 + aCodeBig 0 cast i + result !] times
+  result
+] call;
+
+undo: [
+  currentOffset 1 - !currentOffset
+  currentColumn 1 - !currentColumn
+  currentOffset ls fieldCount < [
+    currentOffset ls @ !currentSymbol
+    0n8 currentSymbol textMemoryPointer readMemory !currentCode
+  ] [
+    " " !currentSymbol
+    eof !currentCode
+  ] if
+] func;
+
+iterate: [
+  currentOffset !prevOffset
+  currentLine !prevLine
+  currentColumn !prevColumn
+
+  currentOffset 1 + !currentOffset
+  currentColumn 1 + !currentColumn
+  currentOffset ls fieldCount < [
+    currentOffset ls @ !currentSymbol
+    0n8 currentSymbol textMemoryPointer readMemory !currentCode
+  ] [
+    " " !currentSymbol
+    eof !currentCode
+  ] if
+] func;
+
+lexicalError: [
+  message:;
+  message !currentMessage
+  #"Lexical error! " print message print " at line " print currentLine print ", column " print currentColumn print LF print error
+  error
+] func;
+
+parseCodeInNode: [
+  lastOffset: currentOffset; lastLine: prevLine; lastColumn: prevColumn;
+  parseIdentifier result.pushBack TRUE
+] func;
+
+parseCodeInNode: [currentCode specials.at][parseSpecialCodeInNode] pfunc;
+parseSpecialCodeInNode: ["Unknown parser error" lexicalError] func;
+parseSpecialCodeInNode: [currentCode colon =]["Separated \":\"" lexicalError] pfunc;
+parseSpecialCodeInNode: [currentCode cr =][iterate TRUE] pfunc;
+#parseSpecialCodeInNode: [currentCode cr =]["Wrong encoding, CR symbol" lexicalError] pfunc;
+parseSpecialCodeInNode: [currentCode grid =][parseComment TRUE] pfunc;
+parseSpecialCodeInNode: [currentCode lf =][
+  1 !currentColumn currentLine 
+  1 + !currentLine
+  iterate
+  TRUE
+] pfunc;
+
+parseSpecialCodeInNode: [currentCode terminators.at][
+  currentCode terminator = ~ [
+    termSymbolMem: 1nx allocateMemory;
+    terminator 0n8 cast termSymbolMem writeMemory
+     "Wrong terminator, expected \"" termSymbolMem 1 memoryToText & "\", but found \"" & currentSymbol & "\"" & lexicalError
+    termSymbolMem freeMemory
+  ] when
+  iterate
+  FALSE
+  currentCode specials.at ~ currentCode comma = ~ and currentCode dot = ~ terminator closeSBr = or and ["Wrong symbol after terminator" lexicalError] when
+] pfunc;
+
+parseSpecialCodeInNode: [currentCode starters.at] [parseNestedNode TRUE] pfunc;
+parseSpecialCodeInNode: [currentCode space =][iterate TRUE] pfunc;
+
+parseNestedNode: ["Unknown parser error" lexicalError] func;
+parseNestedNode: [currentCode openFBr =] [
+  lastOffset: currentOffset; lastLine: prevLine; lastColumn: prevColumn;
+  iterate closeFBr parseNode ObjectNode result.pushBack
+] pfunc;
+
+parseNestedNode: [currentCode openSBr =] [
+  lastOffset: currentOffset; lastLine: prevLine; lastColumn: prevColumn;
+  iterate closeSBr parseNode CodeNode result.pushBack
+] pfunc;
+
+parseNestedNode: [currentCode openRBr =] [
+  lastOffset: currentOffset; lastLine: prevLine; lastColumn: prevColumn;
+  iterate closeRBr parseNode ListNode result.pushBack
+] pfunc;
+
+parseNode: [
+  terminator:;
+  result: Array;
+  [
+    parseCodeInNode
+  ] loop
+  result.data
+] func;
+
+parseComment: [
+  [
+    iterate
+    currentCode eof = currentCode lf = or ~
+  ] loop
+] func;
+
+parseIdentifier: [parseName] func;
+parseIdentifier: [currentCode numberSigns.at][iterate tryParseNumberAfterDigit] pfunc;
+parseIdentifier: [currentCode digits.at][parseNumber] pfunc;
+parseIdentifier: [currentCode quote =][parseStringConstant] pfunc;
+
+tryParseNumberAfterDigit: [undo parseName] func;
+tryParseNumberAfterDigit: [currentCode digits.at][undo parseNumber] pfunc;
+
+parseCodeInName: [
+  nameSymbols.getSize 1 = [0 nameSymbols.at "," =] && [
+    "Identifier cannot start from comma!" lexicalError
+  ] when
+  currentSymbol nameSymbols.pushBack iterate TRUE FALSE !first
+] func;
+parseCodeInName: [currentCode endNames.at][
+  currentCode colon = [ TRUE !label iterate ] when
+  FALSE
+] pfunc;
+parseCodeInName: [currentCode comma = nameSymbols.getSize 0 > and][
+  currentCode colon = [ TRUE !label iterate ] when
+  FALSE
+] pfunc;
+parseCodeInName: [currentCode exclamation =][1 checkFirst TRUE !write iterate TRUE] pfunc;
+parseCodeInName: [currentCode dog =][1 checkFirst TRUE !read iterate TRUE] pfunc;
+parseCodeInName: [currentCode dot =][
+  nameSymbols.getSize 0 > [
+    FALSE
+  ] [
+    0 checkFirst
+    TRUE !member
+    iterate
+    TRUE
+  ] if
+] pfunc;
+
+parseCodeInName: [first currentCode digits.at and] [
+  "Idendifiers can't begin from number" lexicalError
+] pfunc;
+
+makeLabel: [
+  name:;
+  name 
+  semicolon parseNode LabelNode
+] func;
+
+makeParseNameResult: [nameSymbols [&] reduce NameNode] func;
+makeParseNameResult: [write][nameSymbols [&] reduce NameWriteNode] pfunc;
+makeParseNameResult: [read][nameSymbols [&] reduce NameReadNode] pfunc;
+makeParseNameResult: [member][makeParseMemberNameResult] pfunc;
+makeParseNameResult: [label][
+  member read write or or ["Label declaration must be without . @ ! modifiers" lexicalError] when
+  nameSymbols [&] reduce makeLabel
+] pfunc;
+
+makeParseMemberNameResult: [nameSymbols [&] reduce NameMemberNode] func;
+makeParseMemberNameResult: [write][nameSymbols [&] reduce NameWriteMemberNode] pfunc;
+makeParseMemberNameResult: [read][nameSymbols [&] reduce NameReadMemberNode] pfunc;
+
+makeParseEmptyNameResult: ["Empty name" lexicalError] func;
+makeParseEmptyNameResult: [write][label ["!" makeLabel]["!" NameNode] if] pfunc;
+makeParseEmptyNameResult: [read][label ["@" makeLabel]["@" NameNode] if] pfunc;
+makeParseEmptyNameResult: [member][
+  read write or [undo "Wrong identifier" lexicalError] when
+  "." NameNode
+] pfunc;
+
+makeParseNameResult: [nameSymbols.getSize 0 =][makeParseEmptyNameResult] pfunc;
+
+parseName: [
+  member: FALSE;
+  read: FALSE;
+  write: FALSE;
+  label: FALSE;
+  firstOffset: currentOffset;  
+  checkFirst: [currentOffset firstOffset - < ["Invalid identifier" lexicalError] when] func;
+  nameSymbols: Array;
+
+  first: TRUE;
+  [
+    parseCodeInName
+  ] loop
+  
+  read write and ["Wrong identifier" lexicalError] when
+
+  makeParseNameResult
+] func;
+
+parseCodeInStringConstant: [currentSymbol nameSymbols.pushBack  FALSE !slashed TRUE] func;
+parseCodeInStringConstant: [currentCode eof =]["Unterminated string" lexicalError] pfunc;
+parseCodeInStringConstant: [currentCode quote =][
+  slashed [
+    currentSymbol nameSymbols.pushBack
+    TRUE
+  ] [
+    FALSE
+  ] if
+  FALSE !slashed
+] pfunc;
+
+parseCodeInStringConstant: [currentCode backSlash =][
+  slashed [
+    currentSymbol nameSymbols.pushBack
+    FALSE !slashed
+  ] [
+    TRUE !slashed
+  ] if
+  TRUE
+] pfunc;
+
+parseStringConstant: [
+  nameSymbols: Array;
+  slashed: FALSE;
+  iterate
+
+  [
+    parseCodeInStringConstant
+    iterate
+  ] loop
+
+  string: "" nameSymbols [&] foldl;
+  string StringNode
+] func;
+
+parseNumberFromDigit: [hasMinus parseDecNumber] func;
+parseNumberFromDigit: [currentCode zero =][iterate parseNumberFromZeroDigit] pfunc;
+parseNumberFromZeroDigit: ["Lead zeros in number are not allowed" lexicalError] func;
+parseNumberFromZeroDigit: [currentCode endNumbers.at][undo hasMinus parseDecNumber] pfunc;
+parseNumberFromZeroDigit: [currentCode dot =][undo hasMinus parseDecNumber] pfunc;
+parseNumberFromZeroDigit: [currentCode nCode =][undo hasMinus parseDecNumber] pfunc;
+parseNumberFromZeroDigit: [currentCode iCode =][undo hasMinus parseDecNumber] pfunc;
+parseNumberFromZeroDigit: [currentCode xCode =][iterate hasMinus parseHexNumber] pfunc;
+
+parseNumber: [
+  hasMinus: FALSE;
+  currentCode minus = [TRUE !hasMinus iterate] when
+  currentCode plus = [iterate] when
+  parseNumberFromDigit
+] func;
+
+getIType: [drop "Wrong number constant" lexicalError] func;
+getIType: [-1 =][drop 0ix] pfunc;
+getIType: [9 =][drop 0i8] pfunc;
+getIType: [207 =][drop 0i16] pfunc;
+getIType: [403 =][drop 0i32] pfunc;
+getIType: [705 =][drop 0i64] pfunc;
+getIType: [0 =][drop 0i32] pfunc;
+
+getNType: [drop "Wrong number constant" lexicalError] func;
+getNType: [-1 =][drop 0nx] pfunc;
+getNType: [9 =][drop 0n8] pfunc;
+getNType: [207 =][drop 0n16] pfunc;
+getNType: [403 =][drop 0n32] pfunc;
+getNType: [705 =][drop 0n64] pfunc;
+getNType: [0 =][drop 0i32] pfunc;
+
+getRType: [drop "Wrong number constant" lexicalError] func;
+getRType: [403 =][drop 0.0r32] pfunc;
+getRType: [705 =][drop 0.0r64] pfunc;
+getRType: [0 =][drop 0.0r64] pfunc;
+
+makeRNumberNode: ["Error in number constant" lexicalError] func;
+makeRNumberNode: [0.0r32 same] [drop Real32Node] pfunc;
+makeRNumberNode: [0.0r64 same] [drop Real64Node] pfunc;
+
+makeNNumberNode: ["Error in number constant" lexicalError] func;
+makeNNumberNode: [0n8 same][drop Numbern8Node] pfunc;
+makeNNumberNode: [0n16 same][drop Numbern16Node] pfunc;
+makeNNumberNode: [0n32 same][drop Numbern32Node] pfunc;
+makeNNumberNode: [0n64 same][drop Numbern64Node] pfunc;
+makeNNumberNode: [0nx same][drop NumbernxNode] pfunc;
+
+makeINumberNode: ["Error in number constant" lexicalError] func;
+makeINumberNode: [0i8 same][drop Numberi8Node] pfunc;
+makeINumberNode: [0i16 same][drop Numberi16Node] pfunc;
+makeINumberNode: [0i32 same][drop Numberi32Node] pfunc;
+makeINumberNode: [0i64 same][drop Numberi64Node] pfunc;
+makeINumberNode: [0ix same][drop NumberixNode] pfunc;
+
+dCheck: [ currentCode digits.at ~ ["Wrong number constant" lexicalError] when ] func;
+xCheck: [
+  currentCode digits.at ~ [
+    currentCode xCode = [
+      -2 currentArray.pushBack
+      iterate
+    ] [
+      "Wrong number constant" lexicalError
+    ] if
+  ] when
+] func;
+
+parseDecDigit: ["Error in number constant" lexicalError] func;
+parseDecDigit: [currentCode endNumbers.at][FALSE] pfunc;
+parseDecDigit: [currentCode begExp.at][
+  stage 1 = ~ ["Wrong number constant" lexicalError] when
+  iterate TRUE
+  afterE !currentArray
+  currentCode numberSigns.at [
+    currentCode minus = !hasEMinus
+    iterate
+  ] when
+
+  dCheck
+] pfunc;
+
+parseDecDigit: [currentCode rCode =][
+  stage 1 = stage 2 = or ~ ["Wrong number constant" lexicalError] when
+  3 !stage
+  iterate TRUE
+  afterT !currentArray
+  dCheck
+] pfunc;
+
+parseDecDigit: [currentCode iCode =][
+  stage 0 = ~ ["Wrong number constant" lexicalError] when
+  3 !stage
+  iterate TRUE
+  afterT !currentArray
+  xCheck
+] pfunc;
+
+parseDecDigit: [currentCode nCode =][
+  stage 0 = ~ ["Wrong number constant" lexicalError] when
+  3 !stage
+  iterate TRUE
+  afterT !currentArray
+  xCheck
+  1 !typeClass
+] pfunc;
+
+parseDecDigit: [currentCode dot =][
+  stage 0 = ~ [
+    FALSE
+  ] [
+    1 !stage
+    iterate
+    currentCode digits.at [
+      afterDot !currentArray
+      2 !typeClass
+      TRUE
+    ] [
+      undo FALSE
+    ] if
+  ] if
+] pfunc;
+
+parseDecDigit: [currentCode digits.at][
+  currentCode zero - 0i8 cast 0 cast currentArray.pushBack
+  iterate TRUE
+] pfunc;
+
+makeDecResult: [
+  type: 0i64;
+  resultType: typeName getIType;
+  ten: 10 type cast;
+  type beforeDot [0i8 cast type cast swap ten * +] foldl hasMinus [neg] when resultType cast token resultType makeINumberNode
+] func;
+
+makeDecResult: [typeClass 1 =][
+  hasMinus ["Negative natural constants not allowed" lexicalError] when
+  type: 0n64;
+  resultType: typeName getNType;
+  ten: 10 type cast;
+  type beforeDot [type cast swap ten * +] foldl resultType cast token resultType makeNNumberNode
+] pfunc;
+
+makeDecResult: [typeClass 2 =][
+  type: 0.0r64;
+  resultType: typeName getRType;
+  ten: 10 type cast;
+  result: type beforeDot [type cast swap ten * +] foldl;
+  tenRcp: ten rcp;
+  fracPartFactor: tenRcp;
+
+  afterDot [
+    type cast
+    fracPartFactor * result + !result
+    fracPartFactor tenRcp * !fracPartFactor
+  ] each
+
+  decOrder: type afterE [type cast swap ten * +] foldl hasEMinus [neg] when;
+  result hasMinus [neg] when ten decOrder ^ * resultType cast token resultType makeRNumberNode
+] pfunc;
+
+parseDecNumber: [
+  hasMinus:;
+  beforeDot: Array;
+  afterDot: Array;
+  afterE: Array;
+  afterT: Array;
+  currentArray: beforeDot;
+  hasEMinus: FALSE;
+  typeClass: 0;
+
+  stage: 0;
+  #0 before dot or else
+  #1 after dot
+  #2 after e
+  #3 after n/r
+
+  result: 0;
+  tokenBegin: currentOffset hasMinus [1 -][0 -] if;
+  tokenEnd: tokenBegin;
+  [
+    parseDecDigit dup [ currentOffset !tokenEnd ] when
+  ] loop
+
+  token: tokenBegin tokenEnd ls range.subRange [&] reduce;
+
+  afterT.getSize 2 > [ "Error in number constant" lexicalError ] when
+
+  typeName: 0 afterT [1 + swap 100 * +] foldl;
+  makeDecResult
+] func;
+
+parseHexDigit: ["Error in number constant" lexicalError] func;
+parseHexDigit: [currentCode dot =][FALSE] pfunc;
+parseHexDigit: [currentCode endNumbers.at][FALSE] pfunc;
+parseHexDigit: [currentCode iCode =][
+  stage 0 = ~ ["Wrong number constant" lexicalError] when
+  1 !stage
+  iterate TRUE
+  afterT !currentArray
+  xCheck
+] pfunc;
+
+parseHexDigit: [currentCode nCode =][
+  stage 0 = ~ ["Wrong number constant" lexicalError] when
+  1 !stage
+  iterate TRUE
+  afterT !currentArray
+  xCheck
+  1 !typeClass
+] pfunc;
+
+parseHexDigit: [currentCode hexDigits.at][
+  stage 0 > currentCode digits.at ~ and ["Hex digits not allowed in type suffix" lexicalError] when
+  currentCode hexToInt.at 0i8 cast 0 cast currentArray.pushBack
+  iterate TRUE
+] pfunc;
+
+makeHexResult: [
+  hasMinus ["Negative hex constants not allowed" lexicalError] when
+  type: 0i64;
+  resultType: typeName getIType;
+  sixteen: 16 type cast;
+  type beforeT [0i8 cast type cast swap sixteen * +] foldl resultType cast token resultType makeINumberNode
+] func;
+
+makeHexResult: [typeClass 1 =][
+  hasMinus ["Negative natural constants not allowed" lexicalError] when
+  type: 0n64;
+  resultType: typeName getNType;
+  sixteen: 16 type cast;
+  type beforeT [type cast swap sixteen * +] foldl resultType cast token resultType makeNNumberNode
+] pfunc;
+
+parseHexNumber: [
+  hasMinus:;
+  beforeT: Array;
+  afterT: Array;
+  currentArray: beforeT;
+  typeClass: 0;
+
+  stage: 0;
+  #0 before n
+  #1 after n
+
+  result: 0;
+  tokenBegin: currentOffset hasMinus [3 -][2 -] if;
+  tokenEnd: tokenBegin;
+  [
+    parseHexDigit dup [ currentOffset !tokenEnd ] when
+  ] loop
+
+  token: tokenBegin tokenEnd ls range.subRange [&] reduce;
+
+  afterT.getSize 2 > [ "Error in number constant" lexicalError ] when
+
+  typeName: 0 afterT [1 + swap 100 * +] foldl;
+
+  makeHexResult
+] func;
+
+parseString: [
+  string:filenameID:;;
+  ls: string textSplit;
+  currentOffset: -1;
+  currentLine: 1;
+  currentColumn: 1;
+
+  prevOffset: 0;
+  prevLine: 0;
+  prevColumn: 0;
+
+  currentSymbol: "";
+  currentCode: 0;
+  currentMessage: "";
+  result: Array;
+
+  tryToParse: [{ERROR: (); offset: currentOffset; line: prevLine; column: prevColumn; message: currentMessage;}] func;
+  tryToParse: [iterate eof parseNode makeArray !result TRUE][result] pfunc;
+  tryToParse
+
+  #iterate eof parseNode makeArray
+] func;

@@ -1,0 +1,18 @@
+=: [ fieldCount TRUE ] [
+  array0: array1:;;
+  array0 fieldCount array1 fieldCount = [
+    i: 0; [
+      i array0 fieldCount = [
+        TRUE FALSE
+      ] [
+        i array0 @ i array1 @ = [
+          i 1 + !i TRUE
+        ] [
+          FALSE FALSE
+        ] if
+      ] if
+    ] loop
+  ] [
+    FALSE
+  ] if
+] pfunc;

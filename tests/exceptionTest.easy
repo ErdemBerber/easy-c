@@ -1,0 +1,65 @@
+"sl/control" useFile
+"../exception" useFile
+"../util" useFile
+
+[
+  "Test 1" LF & print
+
+  [
+    "did not throw"
+  ] [
+    SHOULD NEVER GET THERE
+  ] catch
+
+  [ "did not throw" = ] assert "passed" LF & print
+] call
+
+[
+  "Test 2" LF & print
+
+  [
+    "thrown" throw
+    SHOULD NEVER GET THERE
+  ] [
+    " and caught" &
+  ] catch
+
+  [ "thrown and caught" = ] assert "passed" LF & print
+] call
+
+[
+  "Test 3" LF & print
+
+  [
+    [
+      "did not throw"
+    ] [
+      SHOULD NEVER GET THERE
+    ] catch
+    throw
+    SHOULD NEVER GET THERE
+  ] [
+    " on the first attempt, but thrown on the second" &
+  ] catch
+
+  [ "did not throw on the first attempt, but thrown on the second" = ] assert "passed" LF & print
+] call
+
+[
+  "Test 4" LF & print
+
+  [
+    [
+      "thrown" throw
+      SHOULD NEVER GET THERE
+    ] [
+      " and caught" &
+    ] catch
+    throw
+    SHOULD NEVER GET THERE
+  ] [
+    " twice" &
+  ] catch
+
+  [ "thrown and caught twice" = ] assert "passed" LF & print
+] call
