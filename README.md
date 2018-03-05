@@ -23,7 +23,7 @@ Resulting ***test.exe*** is the easy compiler binary. It can be renamed to ***ea
 
 ## References
 ### [MPL Standard Library](https://github.com/Matway/easy-sl)
-Library (built with MPL) contains generic algorithms and data structures for MPL. It provides useful utilities in all stages of the MPL Compiler development.
+Library (built with MPL) contains generic algorithms and data structures for MPL. It provides utilities for various stages of development.
 ### [LLVM IR Library](https://github.com/Matway/easy-llvm)
 Uniform API for creating LLVM IR code, built with MPL.
 ## Project Development Status
