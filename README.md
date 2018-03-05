@@ -3,14 +3,12 @@
 
 ### MPL Compiler Features :
 
-* Open source project
 * Written in MPL / Easy language
 * Supports dynamic nature of MPL / Easy language
 * Build on core MPL / Easy written Standard Library and LLVM
 * Multi-pass architecture for MPL / Easy optimization
 * Capable of compiling any MPL code with any complexity
 * Ability to built transformable LLVM IR codes
-* Builds binary executable files
 * Self-hosted
 
 ## Building MPL Compiler
