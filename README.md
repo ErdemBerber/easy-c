@@ -8,7 +8,7 @@
 * Build on core MPL / Easy written Standard Library and LLVM
 * Multi-pass architecture for MPL / Easy optimization
 * Capable of compiling any MPL code with any complexity
-* Ability to built transformable LLVM IR codes
+* Ability to build transformable LLVM IR codes
 * Self-hosted
 
 ## Building MPL Compiler
@@ -23,7 +23,7 @@ Resulting ***test.exe*** is the easy compiler binary. It can be renamed to ***ea
 
 ## References
 ### [MPL Standard Library](https://github.com/Matway/easy-sl)
-Library which contains generic algorithms and data structures for MPL, also provided useful utilities at various stages of the MPL Compiler development, built with MPL.
+Library (built with MPL) contains generic algorithms and data structures for MPL. It provides useful utilities in all stages of the MPL Compiler development.
 ### [LLVM IR Library](https://github.com/Matway/easy-llvm)
 Uniform API for creating LLVM IR code, built with MPL.
 ## Project Development Status
