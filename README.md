@@ -1,9 +1,9 @@
 # easy-c
 # MPL / Easy Compiler
-Also known as easy-c, was written in MPL programming language.
 
 ### MPL Compiler Features :
 
+* Open source project
 * Written in MPL / Easy language
 * Supports dynamic nature of MPL / Easy language
 * Build on core MPL / Easy written Standard Library and LLVM
@@ -12,7 +12,6 @@ Also known as easy-c, was written in MPL programming language.
 * Ability to built transformable LLVM IR codes
 * Builds binary executable files
 * Self-hosted
-* Open source project.
 
 ## Building MPL Compiler
 * **1.** git clone git@[github.com:Matway/easy-c](https://github.com:Matway/easy-c).git
