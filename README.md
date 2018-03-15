@@ -16,7 +16,7 @@
 * **2.** cd easy-c
 * **3.** git clone git@[github.com:Matway/easy-sl](https://github.com/Matway/easy-sl).git sl
 * **4.** git clone git@[github.com:Matway/easy-llvm](https://github.com/Matway/easy-llvm).git llvm
-* **5.** Extract all files from bundle: [https://matway.net/easy/easyc_bundle.7z](https://matway.net/easy/easyc_bundle.7z)
+* **5.** Extract all files from bundle: [https://matway.net/easy/easyc_bundle_windows.7z](https://matway.net/easy/easyc_bundle_windows.7z)
 * **6.** Run build.bat
 
 Resulting ***test.exe*** is the easy compiler binary. It can be renamed to ***easyc.exe***.
